@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="conversionApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binary Number System Converter</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <style>
+        /* Universal Styling */
+        * {
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #e0f7fa, #81d4fa);
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Header Styling */
+        header {
+            background-color: #1e88e5;
+            color: #fff;
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        /* Navigation Bar Styling */
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #42a5f5;
+            width: 100%;
+            padding: 15px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+            padding: 10px 20px;
+            background-color: #64b5f6;
+            border-radius: 30px;
+            font-size: 18px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        nav a:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Main Container Styling */
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        /* Card Styling */
+        .card {
+            background-color: #ffffff;
+            width: 80%;
+            max-width: 600px;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .card h2 {
+            font-size: 28px;
+            color: #1e88e5;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        /* Form Elements */
+        label {
+            font-size: 18px;
+            margin-top: 10px;
+            color: #555;
+            text-align: left;
+            width: 100%;
+            max-width: 300px;
+            display: inline-block;
+        }
+
+        input, select {
+            width: 100%;
+            max-width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            margin: 10px 0;
+            outline: none;
+            transition: box-shadow 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            box-shadow: 0 0 8px rgba(30, 136, 229, 0.5);
+        }
+
+        /* Output Styling */
+        p#strong {
+            font-size: 20px;
+            color: #1e88e5;
+            font-weight: bold;
+            margin-top: 20px;
+            word-break: break-all;
+        }
+
+        /* Footer Styling */
+        footer {
+            background-color: #1565c0;
+            color: #fff;
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+            margin-top: auto;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        footer a {
+            color: #82b1ff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body ng-controller="BinaryConverterController">
+
+    <header>
+        <h1>Binary Number System Converter</h1>
+    </header>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="basic.html">Basic Calc</a>
+        <a href="conversion.html">Converter</a>
+        <a href="quiz.html">Quiz</a>
+    </nav>
+
+    <div class="container">
+        <div class="card">
+            <h2>Convert Between Number Systems</h2>
+            <label for="numberValue">Number:</label>
+            <input type="text" id="numberValue" ng-model="numberValue" placeholder="Enter number">
+
+            <label for="baseFrom">From Base:</label>
+            <select id="baseFrom" ng-model="baseFrom">
+                <option value="binary">Binary</option>
+                <option value="decimal">Decimal</option>
+                <option value="octal">Octal</option>
+                <option value="hexadecimal">Hexadecimal</option>
+            </select>
+
+            <label for="baseTo">To Base:</label>
+            <select id="baseTo" ng-model="baseTo">
+                <option value="binary">Binary</option>
+                <option value="decimal">Decimal</option>
+                <option value="octal">Octal</option>
+                <option value="hexadecimal">Hexadecimal</option>
+            </select>
+
+            <p id="strong">Converted Number: {{ convertNumberSystem(numberValue, baseFrom, baseTo) || "Invalid Input" }}</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Quiz | Making Conversions Simple</p>
+    </footer>
+
+    <script>
+        angular.module('conversionApp', [])
+            .controller('BinaryConverterController', function($scope) {
+                $scope.convertNumberSystem = function(value, fromBase, toBase) {
+                    if (!value) return '';
+
+                    let decimalValue;
+
+                    // Convert input to decimal based on the fromBase
+                    try {
+                        switch (fromBase) {
+                            case 'binary':
+                                decimalValue = parseInt(value, 2);
+                                break;
+                            case 'decimal':
+                                decimalValue = parseFloat(value);
+                                break;
+                            case 'octal':
+                                decimalValue = parseInt(value, 8);
+                                break;
+                            case 'hexadecimal':
+                                decimalValue = parseInt(value, 16);
+                                break;
+                            default:
+                                return 'Invalid base';
+                        }
+
+                        // Convert decimal to the desired toBase
+                        switch (toBase) {
+                            case 'binary':
+                                return decimalValue.toString(2);
+                            case 'decimal':
+                                return decimalValue.toString(10);
+                            case 'octal':
+                                return decimalValue.toString(8);
+                            case 'hexadecimal':
+                                return decimalValue.toString(16).toUpperCase();
+                            default:
+                                return 'Invalid base';
+                        }
+                    } catch (e) {
+                        return 'Error';
+                    }
+                };
+            });
+    </script>
+</body>
+</html>

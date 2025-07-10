@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="signInApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - Quiz</title>
+    <style>
+        /* Universal Styling */
+        * {
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+/* Body Styling */
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    animation: fadeIn 1s ease;
+}
+
+/* Fade In Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Sign-In Container Styling */
+.sign-in-container {
+    background-color: rgba(45, 45, 58, 0.9);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+    max-width: 400px;
+    width: 100%;
+    margin-top: 20px;
+    animation: slideIn 0.5s ease forwards;
+    opacity: 0;
+    transform: translateY(-20px);
+}
+
+/* Slide In Animation */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Header Styling */
+.sign-in-container h2 {
+    color: #90caf9;
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 30px;
+    animation: textPop 0.5s ease forwards;
+    opacity: 0;
+    animation-delay: 0.5s;
+}
+
+/* Text Pop Animation */
+@keyframes textPop {
+    from {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Form Group Styling */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-size: 16px;
+    margin-bottom: 5px;
+    color: #90caf9;
+    display: block;
+}
+
+/* Input Field Styling */
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #555;
+    border-radius: 5px;
+    background-color: #37474f;
+    color: #e0e0e0;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus {
+    border-color: #42a5f5;
+    outline: none;
+    box-shadow: 0 0 5px rgba(66, 165, 245, 0.5), 0 0 10px rgba(66, 165, 245, 0.5);
+    animation: inputFocus 0.3s ease;
+}
+
+/* Input Focus Animation */
+@keyframes inputFocus {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.02);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Invalid Input Styling */
+.form-group input.ng-invalid.ng-dirty {
+    border-color: #42a5f5;
+}
+
+/* Error Message Styling */
+.form-group .error-msg {
+    color: #42a5f5;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* Button Styling */
+button {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    color: white;
+    background-color: #42a5f5;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    position: relative;
+    overflow: hidden;
+    animation: buttonBounce 0.5s ease forwards;
+    opacity: 0;
+    animation-delay: 1s;
+}
+
+/* Button Bounce Animation */
+@keyframes buttonBounce {
+    from {
+        transform: translateY(10px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+button:hover {
+    background-color: #1e88e5;
+    transform: scale(1.03);
+}
+
+button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+}
+
+/* Footer Text Styling */
+.footer-text {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+    animation: textFadeIn 1s ease forwards;
+    opacity: 0;
+    animation-delay: 1.2s;
+}
+
+/* Footer Text Fade In Animation */
+@keyframes textFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.footer-text a {
+    color: #90caf9;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-text a:hover {
+    text-decoration: underline;
+    color: #42a5f5;
+}
+
+    </style>
+</head>
+<body ng-controller="SignInController">
+
+    <div class="sign-in-container">
+        <h2>Log In to Quiz</h2>
+
+        <!-- Sign In Form -->
+        <form name="signInForm" ng-submit="submitForm(signInForm.$valid)" novalidate>
+
+            <!-- Name Field -->
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" ng-model="user.name" required ng-class="{ 'ng-invalid': signInForm.name.$invalid && signInForm.name.$dirty }">
+                <span class="error-msg" ng-show="signInForm.name.$error.required && signInForm.name.$dirty">Name is required</span>
+            </div>
+
+            <!-- Email Field -->
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" ng-model="user.email" required ng-class="{ 'ng-invalid': signInForm.email.$invalid && signInForm.email.$dirty }">
+                <span class="error-msg" ng-show="signInForm.email.$error.required && signInForm.email.$dirty">Email is required</span>
+                <span class="error-msg" ng-show="signInForm.email.$error.email && signInForm.email.$dirty">Invalid email format</span>
+            </div>
+
+            <!-- Password Field -->
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" ng-model="user.password" required ng-minlength="6" ng-class="{ 'ng-invalid': signInForm.password.$invalid && signInForm.password.$dirty }">
+                <span class="error-msg" ng-show="signInForm.password.$error.required && signInForm.password.$dirty">Password is required</span>
+                <span class="error-msg" ng-show="signInForm.password.$error.minlength && signInForm.password.$dirty">Password must be at least 6 characters long</span>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" ng-disabled="signInForm.$invalid">Log In</button>
+
+        </form>
+
+        <!-- Footer Text -->
+        <p class="footer-text">Don't have an account? <a href="signup.html">Sign Up</a></p>
+    </div>
+
+    <!-- AngularJS Library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+
+    <!-- Sign In App Script -->
+    <script>
+        var app = angular.module('signInApp', []);
+
+        app.controller('SignInController', function($scope, $window) {
+            $scope.user = {};
+
+            // Form submit logic
+            $scope.submitForm = function(isValid) {
+                if (isValid) {
+                    alert('Log In successful! Enjoy your math quiz. Good luck!');
+                    // Redirect to the home page after successful sign-in
+                    $window.location.href = 'quiz.html';
+                } else {
+                    alert('Please fill out the form correctly.');
+                }
+            };
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz-app</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #7bb3ef, #0056b3, #2c3e50);
+            background-size: 400% 400%;
+            animation: gradientBackground 10s ease infinite;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        @keyframes gradientBackground {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        header {
+            background-color: rgba(0, 0, 50, 0.8);
+            width: 100%;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 50, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 32px;
+            color: #00cfff;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        nav a {
+            color: #00cfff;
+            padding: 10px 20px;
+            text-decoration: none;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        nav a:hover {
+            background-color: #00cfff;
+            color: #000;
+            transform: scale(1.1);
+        }
+
+        .welcome {
+            text-align: center;
+            padding: 40px;
+            background: rgba(0, 0, 50, 0.5);
+            width: 80%;
+            margin-top: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 50, 0.5);
+        }
+
+        .welcome h2 {
+            font-size: 42px;
+            margin: 0;
+            color: #00cfff;
+            animation: textGlow 2s infinite alternate;
+        }
+
+        @keyframes textGlow {
+            0% { text-shadow: 0 0 5px #00cfff; }
+            100% { text-shadow: 0 0 20px #00cfff; }
+        }
+
+        .welcome p {
+            font-size: 20px;
+            margin-top: 15px;
+            color: #cce7ff;
+        }
+
+        .cards {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            width: 280px;
+            box-shadow: 0 8px 24px rgba(0, 0, 50, 0.4);
+            text-align: center;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .card a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .card img {
+            width: 100%;
+            height: 180px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover img {
+            transform: scale(1.05);
+        }
+
+        .card h3 {
+            margin: 0;
+            font-size: 22px;
+            color: #00cfff;
+        }
+
+        .card p {
+            font-size: 16px;
+            color: #cce7ff;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 28px rgba(0, 0, 50, 0.6);
+        }
+
+        .quiz {
+            text-align: center;
+            padding: 20px 40px;
+            background: rgba(0, 123, 255, 0.8);
+            width: 80%;
+            margin: 20px auto;
+            border-radius: 15px;
+            color: #fff;
+        }
+
+        footer {
+            background: rgba(0, 0, 50, 0.7);
+            color: #00cfff;
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 -4px 10px rgba(0, 0, 50, 0.5);
+            position: relative;
+            bottom: 0;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        footer a {
+            color: #00cfff;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            .cards {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .card {
+                width: 90%;
+            }
+
+            header h1, .welcome h2 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Quizz</h1>
+        <nav>
+            <a href="login.html">Login</a>
+            <a href="about.html">About Us</a>
+            <a href="signup.html">Sign In</a>
+        </nav>
+    </header>
+
+    <section class="welcome">
+        <h2>Welcome to our Quiz app</h2>
+        <p>"Mathematics is not about numbers, equations, or algorithms: it is about understanding."</p>
+    </section>
+
+    <section class="cards">
+        <div class="card">
+            <a href="basic.html">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTprcIyf1P_g-g5uTdnmtlC5iktyIA8CqIXQw&s" alt="Normal Calculator">
+                <h3>Normal Calculator</h3>
+                <p>Perform basic arithmetic calculations quickly and efficiently.</p>
+            </a>
+        </div>
+        
+        <div class="card">
+            <a href="conversion.html">
+                <img src="https://neilpatel.com/wp-content/uploads/2017/08/conversions-1.jpg" alt="Unit Conversion">
+                <h3>Unit Conversion</h3>
+                <p>Easily convert between various units of measurement.</p>
+            </a>
+        </div>
+        <div class="card">
+            <a href="binary.html">
+                <img src="https://files.codingninjas.in/article_images/different-number-systems-and-their-interconversion-0-1645821474.jpg" alt="Number System">
+                <h3>Number System</h3>
+                <p>Convert between different number systems like binary and decimal.</p>
+            </a>
+        </div>
+
+        <section class="quiz">
+            <h2>TIME TO TAKE CHALLENGE</h2>
+            <p>"Sharpen your skills with our interactive quizzes!"</p>
+        </section>
+
+        <div class="card">
+            <a href="login.html">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGUKc8_zn252_L5gUY7VSeHJgkiv9MmLwqfkb9rumDOsBbqxDU0ehhvJk_FXGntYCsrSY&usqp=CAU" alt="Math Quiz">
+                <h3>Math Quiz</h3>
+                <p>Challenge yourself with fun math quizzes.</p>
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Quiz | Your Math Guide | How can I help you?</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="conversionApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversion Center</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <style>
+        /* Universal Styling */
+        * {
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Header Styling */
+header {
+    background-color: #0d47a1;
+    color: #fff;
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    position: sticky;
+    top: 0;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.5em;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Navigation Styling */
+nav {
+    display: flex;
+    justify-content: center;
+    background-color: #1565c0;
+    width: 100%;
+    padding: 15px 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 10px;
+    padding: 10px 20px;
+    background-color: #42a5f5;
+    border-radius: 30px;
+    font-size: 18px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+nav a:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Main Container */
+.converter-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    max-width: 1200px;
+    margin-top: 30px;
+    gap: 20px;
+}
+
+/* Card Styling */
+.converter-card {
+    background-color: #ffffff;
+    padding: 25px;
+    width: 300px;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s, box-shadow 0.3s;
+    text-align: center;
+}
+
+.converter-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+.converter-card h2 {
+    font-size: 22px;
+    margin-bottom: 15px;
+    color: #0d47a1;
+}
+
+/* Form Styling */
+label {
+    font-size: 16px;
+    margin-bottom: 5px;
+    color: #555;
+    text-align: left;
+    display: block;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    margin-bottom: 15px;
+}
+
+input:focus, select:focus {
+    border-color: #1565c0;
+    box-shadow: 0 0 8px rgba(21, 101, 192, 0.2);
+}
+
+/* Output Styling */
+p {
+    font-size: 18px;
+    font-weight: bold;
+    color: #0d47a1;
+    margin-top: 20px;
+}
+
+/* Footer Styling */
+footer {
+    background-color: #0d47a1;
+    color: #f4f7fc;
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
+    font-size: 16px;
+    margin-top: auto;
+}
+
+footer a {
+    color: #f4f7fc;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+    </style>
+</head>
+<body ng-controller="ConverterController">
+
+    <header>
+        <h1>Conversion Center</h1>
+    </header>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="basic.html">Basic Calculator</a>
+        <a href="binary.html">Number system</a>
+        <a href="quiz.html">Math Quiz</a>
+    </nav>
+
+    <div class="converter-container">
+        <!-- Currency Converter -->
+        <div class="converter-card">
+            <h2>Currency Converter</h2>
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" ng-model="currencyAmount" placeholder="Enter amount" required>
+
+            <label for="currencyFrom">From:</label>
+            <select id="currencyFrom" ng-model="currencyFrom">
+                <option value="USD">USD</option>
+                <option value="EUR">EUR</option>
+                <option value="GBP">GBP</option>
+                <option value="INR">INR</option>
+            </select>
+
+            <label for="currencyTo">To:</label>
+            <select id="currencyTo" ng-model="currencyTo">
+                <option value="USD">USD</option>
+                <option value="EUR">EUR</option>
+                <option value="GBP">GBP</option>
+                <option value="INR">INR</option>
+            </select>
+
+            <p>Converted Amount: {{ convertCurrency(currencyAmount, currencyFrom, currencyTo) | number:2 }}</p>
+        </div>
+
+        <!-- Length Converter -->
+        <div class="converter-card">
+            <h2>Length Converter</h2>
+            <label for="lengthValue">Length:</label>
+            <input type="number" id="lengthValue" ng-model="lengthValue" placeholder="Enter length" required>
+
+            <label for="lengthFrom">From:</label>
+            <select id="lengthFrom" ng-model="lengthFrom">
+                <option value="meters">Meters</option>
+                <option value="kilometers">Kilometers</option>
+                <option value="miles">Miles</option>
+                <option value="feet">Feet</option>
+            </select>
+
+            <label for="lengthTo">To:</label>
+            <select id="lengthTo" ng-model="lengthTo">
+                <option value="meters">Meters</option>
+                <option value="kilometers">Kilometers</option>
+                <option value="miles">Miles</option>
+                <option value="feet">Feet</option>
+            </select>
+
+            <p>Converted Length: {{ convertLength(lengthValue, lengthFrom, lengthTo) | number:2 }}</p>
+        </div>
+
+        <!-- Temperature Converter -->
+        <div class="converter-card">
+            <h2>Temperature Converter</h2>
+            <label for="temperatureValue">Temperature:</label>
+            <input type="number" id="temperatureValue" ng-model="temperatureValue" placeholder="Enter temperature" required>
+
+            <label for="tempFrom">From:</label>
+            <select id="tempFrom" ng-model="tempFrom">
+                <option value="Celsius">Celsius</option>
+                <option value="Fahrenheit">Fahrenheit</option>
+                <option value="Kelvin">Kelvin</option>
+            </select>
+
+            <label for="tempTo">To:</label>
+            <select id="tempTo" ng-model="tempTo">
+                <option value="Celsius">Celsius</option>
+                <option value="Fahrenheit">Fahrenheit</option>
+                <option value="Kelvin">Kelvin</option>
+            </select>
+
+            <p>Converted Temperature: {{ convertTemperature(temperatureValue, tempFrom, tempTo) | number:2 }}</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Quiz | Simplifying Conversions</p>
+    </footer>
+
+    <script>
+        angular.module('conversionApp', [])
+        .controller('ConverterController', function($scope) {
+            // Mock currency rates
+            const currencyRates = { USD: 1, EUR: 0.85, GBP: 0.75, INR: 73.5 };
+
+            // Length Conversion Rates
+            const lengthRates = { meters: 1, kilometers: 0.001, miles: 0.000621371, feet: 3.28084 };
+
+                      // Currency Conversion
+                      $scope.convertCurrency = function(amount, from, to) {
+                if (amount && from && to) {
+                    return (amount / currencyRates[from]) * currencyRates[to];
+                }
+                return 0;
+            };
+
+            // Length Conversion
+            $scope.convertLength = function(value, from, to) {
+                if (value && from && to) {
+                    return (value / lengthRates[from]) * lengthRates[to];
+                }
+                return 0;
+            };
+
+            // Temperature Conversion
+            $scope.convertTemperature = function(value, from, to) {
+                if (value === undefined || from === undefined || to === undefined) {
+                    return '';
+                }
+
+                let result = value;
+
+                if (from === 'Celsius') {
+                    if (to === 'Fahrenheit') result = (value * 9 / 5) + 32;
+                    else if (to === 'Kelvin') result = value + 273.15;
+                } else if (from === 'Fahrenheit') {
+                    if (to === 'Celsius') result = (value - 32) * 5 / 9;
+                    else if (to === 'Kelvin') result = ((value - 32) * 5 / 9) + 273.15;
+                } else if (from === 'Kelvin') {
+                    if (to === 'Celsius') result = value - 273.15;
+                    else if (to === 'Fahrenheit') result = ((value - 273.15) * 9 / 5) + 32;
+                }
+
+                return result;
+            };
+        });
+    </script>
+</body>
+</html>
+

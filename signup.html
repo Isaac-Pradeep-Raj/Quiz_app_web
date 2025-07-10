@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="registerApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Quiz</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background:azure; /* New blue background */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            color: #ffffff; /* Changed to white for better contrast */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            opacity: 0.95; /* Slightly increased opacity for better visibility */
+        }
+
+        .register-container {
+            background-color: rgba(10, 10, 30, 0.85); /* Darker transparent background for contrast */
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            max-width: 400px;
+            width: 80%;
+            animation: fadeIn 0.5s; /* Animation for container appearance */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .register-container h2 {
+            color: #00bfff; /* Light blue color for header */
+            font-size: 28px;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7); /* Shadow for text */
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 16px;
+            margin-bottom: 5px;
+            color: #a9c0e8; /* Soft blue for labels */
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #3a3a3c; /* Dark border */
+            border-radius: 5px;
+            background-color: #2a2a2c; /* Darker input background */
+            color: #f0f0f0;
+            transition: border-color 0.3s; /* Smooth transition for border color */
+        }
+
+        .form-group input.ng-invalid.ng-dirty {
+            border-color: #ff6b6b; /* Change border color for invalid input */
+        }
+
+        .form-group .error-msg {
+            color: #ff6b6b; /* Error message color */
+            font-size: 14px;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            color: white;
+            background-color: #007bff; /* Blue button */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s; /* Added transform transition */
+        }
+
+        button:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+            transform: scale(1.05); /* Scale up on hover */
+        }
+
+        .footer-text {
+            text-align: center;
+            margin-top: 20px;
+            color: #a9c0e8; /* Footer text color */
+        }
+
+        .footer-text a {
+            color: #00bfff; /* Link color */
+            text-decoration: none;
+            transition: color 0.3s; /* Smooth color transition */
+        }
+
+        .footer-text a:hover {
+            color: #ffffff; /* Change link color on hover */
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body ng-controller="RegisterController">
+
+    <div class="register-container">
+        <h2>Create Your Quiz Account</h2>
+
+        <!-- Register Form -->
+        <form name="registerForm" ng-submit="submitForm(registerForm.$valid)" novalidate>
+
+            <!-- Full Name Field -->
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" ng-model="user.name" required ng-class="{ 'ng-invalid': registerForm.name.$invalid && registerForm.name.$dirty }">
+                <span class="error-msg" ng-show="registerForm.name.$error.required && registerForm.name.$dirty">Full name is required</span>
+            </div>
+
+            <!-- Email Field -->
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" ng-model="user.email" required ng-class="{ 'ng-invalid': registerForm.email.$invalid && registerForm.email.$dirty }">
+                <span class="error-msg" ng-show="registerForm.email.$error.required && registerForm.email.$dirty">Email is required</span>
+                <span class="error-msg" ng-show="registerForm.email.$error.email && registerForm.email.$dirty">Invalid email format</span>
+            </div>
+
+            <!-- Mobile Number Field -->
+            <div class="form-group">
+                <label for="mobile">Mobile Number</label>
+                <input type="tel" id="mobile" name="mobile" ng-model="user.mobile" required ng-pattern="/^\d{10}$/" ng-class="{ 'ng-invalid': registerForm.mobile.$invalid && registerForm.mobile.$dirty }">
+                <span class="error-msg" ng-show="registerForm.mobile.$error.required && registerForm.mobile.$dirty">Mobile number is required</span>
+                <span class="error-msg" ng-show="registerForm.mobile.$error.pattern && registerForm.mobile.$dirty">Mobile number must be 10 digits</span>
+            </div>
+
+            <!-- Password Field -->
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" ng-model="user.password" required ng-minlength="6" ng-class="{ 'ng-invalid': registerForm.password.$invalid && registerForm.password.$dirty }">
+                <span class="error-msg" ng-show="registerForm.password.$error.required && registerForm.password.$dirty">Password is required</span>
+                <span class="error-msg" ng-show="registerForm.password.$error.minlength && registerForm.password.$dirty">Password must be at least 6 characters long</span>
+            </div>
+
+            <!-- Confirm Password Field -->
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" ng-model="user.confirmPassword" required ng-class="{ 'ng-invalid': registerForm.confirmPassword.$invalid && registerForm.confirmPassword.$dirty }">
+                <span class="error-msg" ng-show="registerForm.confirmPassword.$error.required && registerForm.confirmPassword.$dirty">Confirming password is required</span>
+                <span class="error-msg" ng-show="user.password !== user.confirmPassword && registerForm.confirmPassword.$dirty">Passwords do not match</span>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" ng-disabled="registerForm.$invalid">Register</button>
+
+        </form>
+
+        <!-- Footer Text -->
+        <p class="footer-text">Already have an account? <a href="login.html">Log In</a></p>
+    </div>
+
+    <!-- AngularJS Library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+
+    <!-- Register App Script -->
+    <script>
+        var app = angular.module('registerApp', []);
+
+        app.controller('RegisterController', function($scope, $window, $http) {
+            $scope.user = {};
+
+            // Form submit logic
+            $scope.submitForm = function(isValid) {
+                if (isValid) {
+                    if ($scope.user.password === $scope.user.confirmPassword) {
+                        // Send the user data to the backend
+                        $http.post('http://localhost:3000/register', $scope.user)
+                            .then(function(response) {
+                                alert(response.data.message);
+                                // Redirect to maths quiz page after successful registration
+                                $window.location.href = 'index.html';
+                            })
+                            .catch(function(error) {
+                                alert('Error: ' + error.data.error);
+                            });
+                    } else {
+                        alert('Passwords do not match.');
+                    }
+                } else {
+                    alert('Please fill out the form correctly.');
+                }
+            };
+        });
+    </script>
+    
+</body>
+</html>

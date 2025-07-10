@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="quizApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Quiz Challenge</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #f3e5f5, #e1f5fe);
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #171ae0;
+            color: white;
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 0;
+        }
+
+        header h1 {
+            margin: 10px 0;
+            font-size: 32px;
+            text-transform: uppercase;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #2775b0;
+            width: 100%;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 20px;
+            padding: 10px 20px;
+            border-radius: 30px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            font-size: 16px;
+        }
+
+
+        nav a:hover {
+            background-color: #f4f7fc;
+            color: #1b1d9a;
+            transform: scale(1.1);
+        }
+
+        .quiz-container {
+            max-width: 800px;
+            background-color: #fff;
+            padding: 30px;
+            margin: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+
+        .quiz-container h2 {
+            text-align: center;
+            font-size: 26px;
+            color: #2e2d59;
+            margin-bottom: 30px;
+        }
+
+        .question-container {
+            background-color: #f0f8ff;
+            border: 1px solid #d6eaff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .question-container h3 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .options label {
+            display: block;
+            font-size: 16px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .options label:hover {
+            color: #1e90ff;
+        }
+
+        .options input {
+            margin-right: 10px;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            border: none;
+            border-radius: 50px;
+            background-color: #1e90ff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #00bfff;
+        }
+
+        #result {
+            font-size: 22px;
+            margin-top: 20px;
+            color: #333;
+            text-align: center;
+        }
+
+        .wrong {
+            color: red;
+        }
+
+        footer {
+            background-color: #2e2d59;
+            color: white;
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+            margin-top: auto;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .quiz-container {
+                margin: 30px 20px;
+            }
+
+            header h1 {
+                font-size: 24px;
+            }
+
+            nav a {
+                font-size: 14px;
+                padding: 8px 15px;
+            }
+
+            button {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body ng-controller="quizController">
+    <header>
+        <h1>Math Quiz Challenge</h1>
+    </header>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="basic.html">Basic Calc</a>
+        <a href="conversion.html">Converter</a>
+        <a href="binary.html">Binary</a>
+    </nav>
+
+    <div class="quiz-container">
+        <h2>Test Your Math Skills</h2>
+
+        <form>
+            <div class="question-container" ng-repeat="q in questions">
+                <h3>{{ q.question }}</h3>
+                <div class="options">
+                    <label ng-repeat="option in q.options">
+                        <input type="radio" ng-model="selectedOptions[$parent.$index]" value="{{ option }}">
+                        {{ option }}
+                        <span ng-if="selectedOptions[$parent.$index] !== undefined && selectedOptions[$parent.$index] !== q.answer && selectedOptions[$parent.$index] === option" class="wrong">*</span>
+                    </label>
+                </div>
+            </div>
+        </form>
+
+        <button ng-click="submitQuiz()">Submit Quiz</button>
+        <div id="result" ng-if="quizSubmitted">
+            Your Score: {{ score }}/{{ questions.length }} <br>
+            <span ng-if="score > 5">Great job! You passed!</span>
+            <span ng-if="score <= 5">Keep practicing to improve your score!</span>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Quiz | Challenge Your Math Skills</p>
+    </footer>
+
+    <script>
+var app = angular.module('quizApp', []);
+
+app.controller('quizController', function($scope, $http) {
+    $scope.questions = [];
+    $scope.selectedOptions = [];
+    $scope.score = 0;
+    $scope.quizSubmitted = false;
+
+    // Step 1️⃣: get a session token
+    $http.get('https://opentdb.com/api_token.php?command=request')
+    .then(function(res) {
+        const token = res.data.token;
+        fetchQuestions(token);
+    })
+    .catch(err => alert('Token error'));
+
+    function fetchQuestions(token) {
+        const url = `https://opentdb.com/api.php?amount=10&category=19&type=multiple&token=${token}`;
+        $http.get(url)
+        .then(function(res) {
+            $scope.questions = res.data.results.map(q => ({
+                question: decodeHtml(q.question),
+                options: shuffle([q.correct_answer, ...q.incorrect_answers].map(decodeHtml)),
+                answer: decodeHtml(q.correct_answer)
+            }));
+        })
+        .catch(err => alert('Load questions failed'));
+    }
+
+    $scope.submitQuiz = function() {
+        $scope.score = 0;
+        $scope.quizSubmitted = true;
+
+        $scope.questions.forEach((q, i) => {
+            if ($scope.selectedOptions[i] === q.answer) { $scope.score++; }
+        });
+
+        const name = prompt("Please enter your name:");
+        if (name) {
+            $http.post('http://localhost:8001/submit-score', { name, score: $scope.score })
+              .then(res => alert(res.data.message))
+              .catch(err => alert('Error submitting score'));
+        }
+    };
+
+    function decodeHtml(text) {
+        const txt = document.createElement("textarea");
+        txt.innerHTML = text;
+        return txt.value;
+    }
+
+    function shuffle(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i+1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+});
+</script>
+
+</body>
+</html>
+       
